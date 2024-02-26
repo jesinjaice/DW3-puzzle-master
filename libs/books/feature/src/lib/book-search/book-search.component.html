@@ -7,7 +7,7 @@
       placeholder="Search for books to add to your reading list"
       formControlName="term"
     />
-    <button mat-icon-button matSuffix>
+    <button mat-icon-button aria-label = "Search  Button" matSuffix>
       <mat-icon>search</mat-icon>
     </button>
   </mat-form-field>
@@ -21,7 +21,7 @@
       </div>
       <div class="book--content">
         <div class="book--content--cover">
-          <img src="{{ book.coverUrl }}" />
+          <img src="{{ book.coverUrl }}" alt="Book Cover"/>
         </div>
         <div class="book--content--info">
           <div><strong>Author:</strong> {{ book.authors.join(',') }}</div>
@@ -33,8 +33,9 @@
           <div>
             <button
               mat-flat-button
+              aria-label="'Add Book to reading list'"
               color="primary"
-              (click)="addBookToReadingList(b)"
+              (click)="addBookToReadingList(book)"
               [disabled]="book.isAdded"
             >
               Want to Read
@@ -47,9 +48,9 @@
 </ng-container>
 <ng-template #empty>
   <div class="empty">
-    <p>
+    <p class ="example-text">
       Try searching for a topic, for example
-      <button (click)="searchExample()" style="cursor: pointer;">"JavaScript"</button>.
+      <button (click)="searchExample()" aria-label ="JavaScript Example Button" style="cursor: pointer;">"JavaScript"</button>.
     </p>
   </div>
 </ng-template>

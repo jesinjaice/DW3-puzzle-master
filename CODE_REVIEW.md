@@ -10,3 +10,18 @@
 5. In file `total-count.component.ts`, we can remove the ngOnit() lifecycle since it is not utilized
 6. In file `book-search.component.html`, for proper accessibility, buttons should be represented with a <button> tag rather than an anchor tag with a (click) listener. Changed it to button (Line 51)
 
+**Accessibility**
+
+**Automated Lighthouse Scan Issues**
+
+1. Buttons do not have an accessible name
+2. Background and foreground colors do not have a sufficient contrast ratio.
+
+
+**Manual Checks**
+
+1. Added alt-text for book-covers image. Gave it as 'book cover' instead of the book title.
+2. `Javascript` is wrapped in an anchor tag in `book-search.component.html` . Changed it to a button element.
+3. Added `aria-label` for necassary buttons to make it readable.
+4. Added darker effects for `reading list` and and `want to read` so that it will provide hover effect to the buttons.
+5. The buttons can be made visually focusable and accessible. The closing button of reading list in `app.component.html` is made focusable by adding outline in `app.component.scss`.
