@@ -1,14 +1,24 @@
-**Code Smells and Improvements**
+**Code Smells**
 
-1. The naming convention of variables below files are not proper. Fixed the naming conventions.
+1. The naming convention of variables for below files are not proper.
     `book-search.component.html`
     `book-search.component.ts`
     `reading-list.component.html`
-2.  Used ngSubmit instead of submit. In `book-search.component.html`, `submit` event added for searchForm is replaced by `ngSubmit`.
-3.  In file `book-search.component.html`, the template contains a date function to change the format of the date. Instead of using a    function, we can use an angular date pipe to change the format.
-4. To prevent memory leak we can use async pipe instead of subscription, for retreiving books. By adding '| async' pipes the subscriptions are handled automatically so there is no need to unsubscirbe manually.
-5. In file `total-count.component.ts`, we can remove the ngOnit() lifecycle since it is not utilized
-6. In file `book-search.component.html`, for proper accessibility, buttons should be represented with a <button> tag rather than an anchor tag with a (click) listener. Changed it to button (Line 51)
+2.  In `book-search.component.html`, `submit` event was added for submit form but as it is reactive form the best practice is to use ngSubmit which provides form validation before sending the request.
+3.  In file `book-search.component.html`, the template contains a date function to change the format of the date. 
+4. To prevent memory leak we can use an async pipe instead of subscription, for retrieving books. By adding '| async' pipes the subscriptions are handled automatically so there is no need to unsubscribe manually.
+5. In file `total-count.component.ts`, we can remove the ngOnInit() lifecycle since it is not utilized. We should not import Angular lifecycle hooks without their utilization.
+6. In file `book-search.component.html`, for proper accessibility, buttons should be represented with a <button> tag rather than an anchor tag with a (click) listener. An anchor tag is primarily used to create links between pages. While a button is used for on page functionality.
+
+**Improvements**
+
+1. Fixed the naming conventions for variables in above mentioned files.
+2. Changed `submit` to `ngSubmit` as it is best practice.
+3. Replaced the date function with Angular Date pipe.
+4. Added `| async` pipes to prevent memory leaks.
+5. Removed lifecycle hooks that are not utilized.
+6. Replaced Anchor tag with Button.
+
 
 **Accessibility**
 
@@ -20,8 +30,9 @@
 
 **Manual Checks**
 
-1. Added alt-text for book-covers image. Gave it as 'book cover' instead of the book title.
-2. `Javascript` is wrapped in an anchor tag in `book-search.component.html` . Changed it to a button element.
-3. Added `aria-label` for necassary buttons to make it readable.
-4. Added darker effects for `reading list` and and `want to read` so that it will provide hover effect to the buttons.
-5. The buttons can be made visually focusable and accessible. The closing button of reading list in `app.component.html` is made focusable by adding outline in `app.component.scss`.
+1. Added alt-text for book-covers image.
+2. `Javascript` is wrapped in an anchor tag in `book-search.component.html`. Change it to a button element.
+3. Added `aria-label` to the `Search icon` to make this more meaningful for the user.
+4. Added darker effects for `Reading list` and `Want to read` so that it will provide a hover effect to the buttons. 
+5. The buttons can be made visually focusable and accessible. The closing button of the reading list in `app.component.html` is made focusable by adding outline in `app.component.scss`.
+6. Added `aria-label` for the `Want to read` button to make it read with the book name.

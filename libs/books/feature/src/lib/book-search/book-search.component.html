@@ -21,7 +21,7 @@
       </div>
       <div class="book--content">
         <div class="book--content--cover">
-          <img src="{{ book.coverUrl }}" alt="Book Cover"/>
+          <img src="{{ book.coverUrl }}" alt=""/>
         </div>
         <div class="book--content--info">
           <div><strong>Author:</strong> {{ book.authors.join(',') }}</div>
@@ -50,7 +50,7 @@
   <div class="empty">
     <p class ="example-text">
       Try searching for a topic, for example
-      <button (click)="searchExample()" aria-label ="JavaScript Example Button" style="cursor: pointer;">"JavaScript"</button>.
+      <button (click)="searchExample()" aria-label ="JavaScript Example Button" class="btn-style">"JavaScript"</button>.
     </p>
   </div>
 </ng-template>

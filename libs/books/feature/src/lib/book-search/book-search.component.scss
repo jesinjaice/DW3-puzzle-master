@@ -72,5 +72,9 @@ form {
 }
 
 .example-text{
-  color: black;
+  color: $black
+}
+
+.btn-style{
+  cursor: pointer;
 }
