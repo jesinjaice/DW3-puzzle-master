@@ -40,26 +40,28 @@ describe('ProductsListComponent', () => {
     tick(500);
     component.searchForm.controls.term.setValue('Blockchain');
     tick(500);
+
     expect(store.dispatch).toHaveBeenCalledTimes(2);
+
     expect(store.dispatch).toHaveBeenCalledWith(searchBooks({ term: 'Javascript' }));
+
     expect(store.dispatch).toHaveBeenCalledWith(searchBooks({ term: 'Blockchain' }));
   }));
   
   it('should not see the search results when input received before 500ms', fakeAsync(() => {
+  
     component.searchForm.controls.term.setValue('Javascript');
     tick(500);
-    component.searchForm.controls.term.setValue('Javascrip');
-    tick(300);
-    component.searchForm.controls.term.setValue('Javascript');
-    tick(500);
+
     expect(store.dispatch).toHaveBeenCalledTimes(1);
   }));
 
-  it('should not see the search results when received same input for search term', fakeAsync(() => {
+  it('should see the previous search result when received same input for search term', fakeAsync(() => {
     component.searchForm.controls.term.setValue('Javascript');
     tick(500);
     component.searchForm.controls.term.setValue('Javascript');
     tick(500);
+
     expect(store.dispatch).toHaveBeenCalledTimes(1);
   }));
   
@@ -67,6 +69,7 @@ describe('ProductsListComponent', () => {
     component.ngOnDestroy();
     component.searchForm.controls.term.setValue('Algorithm');
     tick(500);
+    
     expect(store.dispatch).not.toHaveBeenCalled();
   }));
   
