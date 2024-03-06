@@ -40,7 +40,7 @@ describe('ToReadEffects', () => {
       actions = new ReplaySubject();
       actions.next(ReadingListActions.init());
 
-      effects.loadReadingList$.pipe(takeUntil(unsubscribe$))
+      effects.loadReadingList$
       .subscribe(action => {
         expect(action).toEqual(
           ReadingListActions.loadReadingListSuccess({ list: [] })
@@ -59,7 +59,7 @@ describe('ToReadEffects', () => {
       const finishedDate = new Date().toISOString();
       actions.next(ReadingListActions.markBookAsFinished({ item: Item, finishedDate: finishedDate }));
 
-      effects.markBookAsFinished$.pipe(takeUntil(unsubscribe$))
+      effects.markBookAsFinished$
       .subscribe((action) => {
         expect(action).toEqual(
           ReadingListActions.markBookAsFinished({ item: Item, finishedDate: finishedDate })
