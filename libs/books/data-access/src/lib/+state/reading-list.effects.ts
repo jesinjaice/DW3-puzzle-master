@@ -29,9 +29,9 @@ export class ReadingListEffects implements OnInitEffects {
   addBook$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReadingListActions.addToReadingList),
-      concatMap(({ book, add }) =>
+      concatMap(({ book, addBookStatus }) =>
         this.http.post('/api/reading-list', book).pipe(
-          map(() => ReadingListActions.confirmedAddToReadingList({ book, add })),
+          map(() => ReadingListActions.confirmedAddToReadingList({ book, addBookStatus })),
           catchError(() =>
             of(ReadingListActions.failedAddToReadingList({ book }))
           )
@@ -43,10 +43,10 @@ export class ReadingListEffects implements OnInitEffects {
   removeBook$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReadingListActions.removeFromReadingList),
-      concatMap(({ item, remove }) =>
+      concatMap(({ item, removeBookStatus }) =>
         this.http.delete(`/api/reading-list/${item.bookId}`).pipe(
           map(() =>
-            ReadingListActions.confirmedRemoveFromReadingList({ item, remove })
+            ReadingListActions.confirmedRemoveFromReadingList({ item, removeBookStatus })
           ),
           catchError(() =>
             of(ReadingListActions.failedRemoveFromReadingList({ item }))
@@ -60,15 +60,15 @@ export class ReadingListEffects implements OnInitEffects {
     this.actions$.pipe(
       ofType(ReadingListActions.confirmedAddToReadingList),
       concatMap((action) => {
-        const typeItem:ReadingListItem = {
+        const readingListItem : ReadingListItem = {
           ...action.book,
           bookId: action.book.id
         }
-        if(action.add === false){
+        if(action.addBookStatus === false){
           return this.snackBar.open(
-            `Added ${action.book.title} to reading list`,'Undo', { duration: 2000}
+            `Added ${action.book.title} to reading list`,'Undo', { duration: 3000}
             ).onAction().pipe(map(() =>
-            ReadingListActions.removeFromReadingList({ item:typeItem, remove:true })
+            ReadingListActions.removeFromReadingList({ item : readingListItem, removeBookStatus:true })
             ))
         }
         else
@@ -81,15 +81,15 @@ export class ReadingListEffects implements OnInitEffects {
     this.actions$.pipe(
       ofType(ReadingListActions.confirmedRemoveFromReadingList),
       concatMap((action) => {
-        const typeBook:Book = {
+        const book : Book = {
         id: action.item.bookId,
         ...action.item
       }
-      if(action.remove === false){
+      if(action.removeBookStatus === false){
         return this.snackBar.open(
           `Removed ${action.item.title} to reading list`,'Undo', { duration: 2000}
           ).onAction().pipe(map(() =>
-          ReadingListActions.addToReadingList({ book:typeBook, add:true })
+          ReadingListActions.addToReadingList({ book : book, addBookStatus:true })
           ))
       } 
       else
