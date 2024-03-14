@@ -19,7 +19,7 @@
     <ng-template #notFinished>
       <button
         mat-icon-button
-        [attr.aria-label]="'Remove ' + item.title + ' from reading list'"
+        [attr.aria-label]="'Mark ' + item.title + ' book as finished'"
         (click)="markBookAsFinished(item)"
         data-testing="mark-as-finished"
       >
