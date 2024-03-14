@@ -32,7 +32,7 @@ export class BookSearchComponent {
   }
 
   addBookToReadingList(book: Book) {
-    this.store.dispatch(addToReadingList({ book, addBookStatus: false }));
+    this.store.dispatch(addToReadingList({ book, isBookAdded: false }));
   }
 
   searchExample() {

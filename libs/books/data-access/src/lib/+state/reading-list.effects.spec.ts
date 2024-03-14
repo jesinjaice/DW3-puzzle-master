@@ -1,5 +1,5 @@
 import { TestBed, fakeAsync } from '@angular/core/testing';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore,MockStore } from '@ngrx/store/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
@@ -8,9 +8,8 @@ import { SharedTestingModule,createBook, createReadingListItem } from '@tmo/shar
 import { ReadingListEffects } from './reading-list.effects';
 import * as ReadingListActions from './reading-list.actions';
 
-import { MatSnackBar, MatSnackBarModule, MatSnackBarRef } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Book, ReadingListItem } from '@tmo/shared/models';
-import { takeUntil } from 'rxjs/operators';
 
 describe('ToReadEffects', () => {
   let actions: ReplaySubject<any>;
@@ -20,7 +19,6 @@ describe('ToReadEffects', () => {
   let book: Book;
   let snackbar: MatSnackBar;
   let store : MockStore;
-  let unsubscribe$: Subject<void>;
 
   const bookItem = createReadingListItem('A');
   const itemBook = createBook('B');
@@ -46,13 +44,7 @@ describe('ToReadEffects', () => {
     actions = new ReplaySubject();
     store = TestBed.inject(MockStore);
     snackbar = TestBed.inject(MatSnackBar);
-    unsubscribe$ = new Subject<void>();
   });
-
-  afterEach (()=>{
-    unsubscribe$.next();
-    unsubscribe$.complete();
-  })
 
   describe('loadReadingList$', () => {
     it('should fetch reading list', done => {
@@ -72,12 +64,12 @@ describe('ToReadEffects', () => {
 
   describe('addBook$', () => {
     it('should add a book to the reading list successfully', fakeAsync(() => {
-      actions.next(ReadingListActions.addToReadingList({ book, addBookStatus: false  }));
+      actions.next(ReadingListActions.addToReadingList({ book, isBookAdded: false  }));
 
       effects.addBook$
       .subscribe((action) => {
         expect(action).toEqual(
-          ReadingListActions.confirmedAddToReadingList({ book, addBookStatus: false })
+          ReadingListActions.confirmedAddToReadingList({ book, isBookAdded: false })
         );
       })
 
@@ -85,7 +77,7 @@ describe('ToReadEffects', () => {
     }));
 
     it('should undo the added book when API returns error', fakeAsync(() => {
-      actions.next(ReadingListActions.addToReadingList({ book, addBookStatus: false}));
+      actions.next(ReadingListActions.addToReadingList({ book, isBookAdded: false}));
 
       effects.addBook$
       .subscribe((action) => {
@@ -99,13 +91,13 @@ describe('ToReadEffects', () => {
 
     it('it should show snackbar when confirmedAddToReadingList action is dispatched on successful addition of book.', async() => {
       actions = new ReplaySubject();
-      actions.next(ReadingListActions.confirmedAddToReadingList({ book, addBookStatus:false }));
+      actions.next(ReadingListActions.confirmedAddToReadingList({ book, isBookAdded:false }));
 
       effects.addBook$
         .subscribe(() => {
         snackbar.open(`Added ${book.title} to reading list`,'Undo', { duration: 2000}).onAction().subscribe((action)=>{
           expect(action).toEqual(
-            ReadingListActions.removeFromReadingList({ item:bookItem, removeBookStatus:true }))
+            ReadingListActions.removeFromReadingList({ item:bookItem, isBookRemoved:true }))
         })
       });
     });
@@ -113,12 +105,12 @@ describe('ToReadEffects', () => {
 
   describe('removeBook$', () => {
     it('should remove book successfully from reading list', done => {
-      actions.next(ReadingListActions.removeFromReadingList({ item, removeBookStatus: false }));
+      actions.next(ReadingListActions.removeFromReadingList({ item, isBookRemoved: false }));
 
       effects.removeBook$
       .subscribe((action) => {
         expect(action).toEqual(
-          ReadingListActions.confirmedRemoveFromReadingList({ item, removeBookStatus: false  })
+          ReadingListActions.confirmedRemoveFromReadingList({ item, isBookRemoved: false  })
         );
         done();
       });
@@ -127,7 +119,7 @@ describe('ToReadEffects', () => {
     });
 
     it('should undo removed book when API returns error', fakeAsync(() => {
-      actions.next(ReadingListActions.removeFromReadingList({ item, removeBookStatus: false  }));
+      actions.next(ReadingListActions.removeFromReadingList({ item, isBookRemoved: false  }));
 
       effects.removeBook$
       .subscribe((action) => {
@@ -141,13 +133,13 @@ describe('ToReadEffects', () => {
 
     it('it should show snackbar when confirmedRemoveFromReadingList action is dispatched on successful removal of book.', async() => {
       actions = new ReplaySubject();
-      actions.next(ReadingListActions.confirmedRemoveFromReadingList({ item, removeBookStatus:false }));
+      actions.next(ReadingListActions.confirmedRemoveFromReadingList({ item, isBookRemoved:false }));
 
       effects.removeBook$
         .subscribe(() => {
         snackbar.open(`Removed ${item.title} to reading list`,'Undo', { duration: 2000}).onAction().subscribe((action)=>{
           expect(action).toEqual(
-            ReadingListActions.addToReadingList({ book:itemBook, addBookStatus:true })
+            ReadingListActions.addToReadingList({ book:itemBook, isBookAdded:true })
           );
         })
       });

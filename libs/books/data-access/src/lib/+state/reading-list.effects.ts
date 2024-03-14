@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { catchError, concatMap, exhaustMap, map, tap, switchMap } from 'rxjs/operators';
+import { catchError, concatMap, exhaustMap, map } from 'rxjs/operators';
 import { ReadingListItem, Book } from '@tmo/shared/models';
 import * as ReadingListActions from './reading-list.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -29,9 +29,9 @@ export class ReadingListEffects implements OnInitEffects {
   addBook$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReadingListActions.addToReadingList),
-      concatMap(({ book, addBookStatus }) =>
+      concatMap(({ book, isBookAdded }) =>
         this.http.post('/api/reading-list', book).pipe(
-          map(() => ReadingListActions.confirmedAddToReadingList({ book, addBookStatus })),
+          map(() => ReadingListActions.confirmedAddToReadingList({ book, isBookAdded })),
           catchError(() =>
             of(ReadingListActions.failedAddToReadingList({ book }))
           )
@@ -43,10 +43,10 @@ export class ReadingListEffects implements OnInitEffects {
   removeBook$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReadingListActions.removeFromReadingList),
-      concatMap(({ item, removeBookStatus }) =>
+      concatMap(({ item, isBookRemoved }) =>
         this.http.delete(`/api/reading-list/${item.bookId}`).pipe(
           map(() =>
-            ReadingListActions.confirmedRemoveFromReadingList({ item, removeBookStatus })
+            ReadingListActions.confirmedRemoveFromReadingList({ item, isBookRemoved })
           ),
           catchError(() =>
             of(ReadingListActions.failedRemoveFromReadingList({ item }))
@@ -64,11 +64,11 @@ export class ReadingListEffects implements OnInitEffects {
           ...action.book,
           bookId: action.book.id
         }
-        if(action.addBookStatus === false){
+        if(action.isBookAdded === false){
           return this.snackBar.open(
             `Added ${action.book.title} to reading list`,'Undo', { duration: 3000}
             ).onAction().pipe(map(() =>
-            ReadingListActions.removeFromReadingList({ item : readingListItem, removeBookStatus:true })
+            ReadingListActions.removeFromReadingList({ item : readingListItem, isBookRemoved:true })
             ))
         }
         else
@@ -85,11 +85,11 @@ export class ReadingListEffects implements OnInitEffects {
         id: action.item.bookId,
         ...action.item
       }
-      if(action.removeBookStatus === false){
+      if(action.isBookRemoved === false){
         return this.snackBar.open(
           `Removed ${action.item.title} to reading list`,'Undo', { duration: 2000}
           ).onAction().pipe(map(() =>
-          ReadingListActions.addToReadingList({ book : book, addBookStatus:true })
+          ReadingListActions.addToReadingList({ book : book, isBookAdded:true })
           ))
       } 
       else
