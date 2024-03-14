@@ -56,7 +56,7 @@ describe('ProductsListComponent', () => {
     expect(store.dispatch).toHaveBeenCalledTimes(1);
   }));
 
-  it('should see the previous search result when received same input for search term', fakeAsync(() => {
+  it('should see the previous search result when received same input for search term after 500 milliseconds', fakeAsync(() => {
     component.searchForm.controls.term.setValue('Javascript');
     tick(500);
     component.searchForm.controls.term.setValue('Javascript');
