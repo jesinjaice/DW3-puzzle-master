@@ -14,7 +14,7 @@
 
 1. Fixed the naming conventions for variables in above mentioned files.
 2. Changed `submit` to `ngSubmit` as it is best practice.
-3. Replaced the date function with Angular Date pipe. The date pipe offers a convenient way to format dates without the need for complex logic or funtion. This imporves perfomance.
+3. Replaced the date function with Angular Date pipe. The date pipe offers a convenient way to format dates without the need for complex logic or function. This imporves perfomance.
 4. Added `| async` pipes to prevent memory leaks.
 5. Removed lifecycle hooks that are not utilized.
 6. Replaced Anchor tag with Button.
