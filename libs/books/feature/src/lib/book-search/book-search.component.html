@@ -37,8 +37,9 @@
               color="primary"
               (click)="addBookToReadingList(book)"
               [disabled]="book.isAdded"
+              data-testing = "add-book-button" 
             >
-              Want to Read
+            {{ book.finished ? 'Finished' : 'Want to Read' }}
             </button>
           </div>
         </div>
