@@ -15,6 +15,7 @@
         color="warn"
         [attr.aria-label]="'Remove ' + book.title + ' from reading list'"
         (click)="removeFromReadingList(book)"
+        data-testing= "remove-book-button"
       >
         <mat-icon>remove_circle</mat-icon>
       </button>
